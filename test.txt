@@ -1,6 +1,50 @@
 @startuml
-Alencion -> ztkmkoo : hello
-ztkmkoo -> Alencion : world
-Alencion -> Alencion : plantUML
-Alencion -> Alencion : plantUML
+actor Client #blue
+entity Handler #yellow
+entity Master #red
+entity Service #red
+entity Exception #red
+
+Client -> Handler : HTTP request
+activate Handler
+Handler -> Handler : save ChannelHandlerContext
+Handler -> Handler : convert DssRestMasterActorCommandRequest
+Handler -> Master : DssRestMasterActorCommandRequest
+deactivate Handler
+activate Master
+
+Master -> Master: find service actor
+alt cannot find service actor
+    Master -> Handler : DssRestChannelHandlerCommandResponse(Bad Request)
+    activate Handler
+    deactivate Master 
+    Handler -> Client : HTTP response
+    deactivate Handler
+else
+    activate Master
+    Master -> Service : DssRestServiceActorCommandRequest
+    deactivate Master 
+    activate Service 
+    Service -> Service : make request
+    Service -> Service : handling request
+    alt exception occurred
+        Service -> Exception : DssRestExceptionHandlerCommand
+        deactivate Service 
+        activate Exception
+        Exception -> Exception : make exception response
+        Exception -> Handler : DssRestChannelHandlerCommandResponse(Error)
+        activate Handler
+        deactivate Exception
+        Handler -> Client : HTTP response
+        deactivate Handler
+    else
+        activate Service 
+        Service -> Handler : DssRestChannelHandlerCommandResponse
+        deactivate Service
+        activate Handler
+        deactivate Exception
+        Handler -> Client : HTTP response
+        deactivate Handler
+    end
+end
 @enduml
