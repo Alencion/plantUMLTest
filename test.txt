@@ -2,4 +2,5 @@
 Alencion -> ztkmkoo : hello
 ztkmkoo -> Alencion : world
 Alencion -> Alencion : plantUML
+Alencion -> Alencion : plantUML
 @enduml
