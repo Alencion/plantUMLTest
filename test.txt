@@ -1,0 +1,4 @@
+@startuml
+Alenction -> ztkmkoo : hello
+ztkmkoo -> Alencion : world
+@enduml
