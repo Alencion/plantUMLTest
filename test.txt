@@ -1,4 +1,5 @@
 @startuml
 Alencion -> ztkmkoo : hello
 ztkmkoo -> Alencion : world
+Alencion -> Alencion : plantUML
 @enduml
